@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Effect Test Gallery - Monkey Block</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 50px;
+            font-size: 1.1rem;
+        }
+
+        .effects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        /* Base card style */
+        .effect-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            min-height: 200px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .effect-title {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .effect-description {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           HOVER EFFECTS
+        ============================================ */
+
+        /* 1. Subtle Lift with Shadow */
+        .effect-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .effect-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 2. Glow Effect */
+        .effect-glow {
+            transition: box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .effect-glow:hover {
+            box-shadow: 
+                0 4px 20px rgba(52, 152, 219, 0.3),
+                0 0 0 2px rgba(52, 152, 219, 0.1);
+        }
+
+        /* 3. Scale with Opacity */
+        .effect-scale {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0.95;
+        }
+
+        .effect-scale:hover {
+            transform: scale(1.03);
+            opacity: 1;
+        }
+
+        /* 4. Border Animation */
+        .effect-border {
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .effect-border::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 16px;
+            padding: 2px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .effect-border:hover::before {
+            opacity: 1;
+        }
+
+        /* 5. Shine Sweep */
+        .effect-shine {
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .effect-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 70%
+            );
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+        }
+
+        .effect-shine:hover::after {
+            transform: translateX(50%) translateY(50%) rotate(45deg);
+        }
+
+        /* 6. Morph Shadow */
+        .effect-morph {
+            transition: box-shadow 0.3s ease;
+            box-shadow: 
+                0 4px 6px rgba(0, 0, 0, 0.1),
+                0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .effect-morph:hover {
+            box-shadow: 
+                0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* ============================================
+           ENTRANCE ANIMATIONS
+        ============================================ */
+
+        /* 7. Fade In Up */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .effect-fade-up {
+            animation: fadeInUp 0.6s ease-out backwards;
+            animation-delay: 0.1s;
+        }
+
+        /* 8. Slide In Blur */
+        @keyframes slideInBlur {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+                filter: blur(0);
+            }
+        }
+
+        .effect-slide-blur {
+            animation: slideInBlur 0.8s ease-out backwards;
+            animation-delay: 0.2s;
+        }
+
+        /* 9. Scale Fade */
+        @keyframes scaleFade {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .effect-scale-fade {
+            animation: scaleFade 0.5s ease-out backwards;
+            animation-delay: 0.3s;
+        }
+
+        /* 10. Bounce In */
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .effect-bounce-in {
+            animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
+            animation-delay: 0.4s;
+        }
+
+        /* ============================================
+           COMBINED EFFECTS
+        ============================================ */
+
+        /* 11. Modern Card (Fade + Lift) */
+        .effect-modern {
+            animation: fadeInUp 0.6s ease-out backwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .effect-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 12. Premium Card (Glow + Scale) */
+        .effect-premium {
+            animation: scaleFade 0.5s ease-out backwards;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .effect-premium:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 
+                0 10px 30px rgba(99, 102, 241, 0.2),
+                0 0 0 1px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Stagger animation delays */
+        .effects-grid > :nth-child(1) { animation-delay: 0.05s; }
+        .effects-grid > :nth-child(2) { animation-delay: 0.10s; }
+        .effects-grid > :nth-child(3) { animation-delay: 0.15s; }
+        .effects-grid > :nth-child(4) { animation-delay: 0.20s; }
+        .effects-grid > :nth-child(5) { animation-delay: 0.25s; }
+        .effects-grid > :nth-child(6) { animation-delay: 0.30s; }
+        .effects-grid > :nth-child(7) { animation-delay: 0.35s; }
+        .effects-grid > :nth-child(8) { animation-delay: 0.40s; }
+        .effects-grid > :nth-child(9) { animation-delay: 0.45s; }
+        .effects-grid > :nth-child(10) { animation-delay: 0.50s; }
+        .effects-grid > :nth-child(11) { animation-delay: 0.55s; }
+        .effects-grid > :nth-child(12) { animation-delay: 0.60s; }
+
+        /* Section Headers */
+        .section-header {
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        /* Color coded badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .badge-hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .badge-entrance {
+            background: #9b59b6;
+            color: white;
+        }
+
+        .badge-combined {
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Effect Test Gallery</h1>
+        <p class="subtitle">Modern, elegant effects for Monkey Block feature cards</p>
+
+        <h2 class="section-header">Hover Effects</h2>
+        <div class="effects-grid">
+            <div class="effect-card effect-lift">
+                <h3 class="effect-title">1. Subtle Lift</h3>
+                <p class="effect-description">Clean upward movement with enhanced shadow. Professional and widely used.</p>
+                <span class="badge badge-hover">HOVER</span>
+            </div>
+
+            <div class="effect-card effect-glow">
+                <h3 class="effect-title">2. Soft Glow</h3>
+                <p class="effect-description">Colored shadow glow effect. Great for highlighting important items.</p>
+                <span class="badge badge-hover">HOVER</span>
+            </div>
+
+            <div class="effect-card effect-scale">
+                <h3 class="effect-title">3. Gentle Scale</h3>
+                <p class="effect-description">Minimal scale increase with opacity change. Subtle but effective.</p>
+                <span class="badge badge-hover">HOVER</span>
+            </div>
+
+            <div class="effect-card effect-border">
+                <h3 class="effect-title">4. Gradient Border</h3>
+                <p class="effect-description">Animated gradient border on hover. Modern and eye-catching.</p>
+                <span class="badge badge-hover">HOVER</span>
+            </div>
+
+            <div class="effect-card effect-shine">
+                <h3 class="effect-title">5. Shine Sweep</h3>
+                <p class="effect-description">Diagonal shine effect that sweeps across. Premium feel.</p>
+                <span class="badge badge-hover">HOVER</span>
+            </div>
+
+            <div class="effect-card effect-morph">
+                <h3 class="effect-title">6. Shadow Morph</h3>
+                <p class="effect-description">Smooth shadow transformation. Elegant and modern.</p>
+                <span class="badge badge-hover">HOVER</span>
+            </div>
+        </div>
+
+        <h2 class="section-header">Entrance Animations</h2>
+        <div class="effects-grid">
+            <div class="effect-card effect-fade-up">
+                <h3 class="effect-title">7. Fade In Up</h3>
+                <p class="effect-description">Classic fade with upward movement. Smooth and professional.</p>
+                <span class="badge badge-entrance">ENTRANCE</span>
+            </div>
+
+            <div class="effect-card effect-slide-blur">
+                <h3 class="effect-title">8. Slide Blur</h3>
+                <p class="effect-description">Slides in from side with blur effect. Modern and smooth.</p>
+                <span class="badge badge-entrance">ENTRANCE</span>
+            </div>
+
+            <div class="effect-card effect-scale-fade">
+                <h3 class="effect-title">9. Scale Fade</h3>
+                <p class="effect-description">Scales up while fading in. Simple and elegant.</p>
+                <span class="badge badge-entrance">ENTRANCE</span>
+            </div>
+
+            <div class="effect-card effect-bounce-in">
+                <h3 class="effect-title">10. Bounce In</h3>
+                <p class="effect-description">Playful bounce effect. Good for friendly interfaces.</p>
+                <span class="badge badge-entrance">ENTRANCE</span>
+            </div>
+        </div>
+
+        <h2 class="section-header">Combined Effects (Best Options)</h2>
+        <div class="effects-grid">
+            <div class="effect-card effect-modern">
+                <h3 class="effect-title">11. Modern Card ⭐</h3>
+                <p class="effect-description">Combines fade-in-up entrance with subtle lift hover. Best for professional look.</p>
+                <span class="badge badge-combined">COMBINED</span>
+            </div>
+
+            <div class="effect-card effect-premium">
+                <h3 class="effect-title">12. Premium Card ⭐</h3>
+                <p class="effect-description">Scale fade entrance with colored glow hover. Elegant and attention-grabbing.</p>
+                <span class="badge badge-combined">COMBINED</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
